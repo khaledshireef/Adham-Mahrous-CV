@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Adham Mohamed Mahrous — Video Editor</title>
+    <meta
+      name="description"
+      content="Cinematic video editing portfolio for Adham Mohamed Mahrous — reels, short-form edits, multimedia leadership."
+    />
+
+    <!-- Tailwind (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ["ui-sans-serif", "system-ui", "Segoe UI", "Inter", "Arial"],
+              mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
+            },
+            colors: {
+              ink: {
+                950: "#05060a",
+                900: "#070812",
+                800: "#0b0f1f",
+              },
+              neon: {
+                cyan: "#21f6ff",
+                violet: "#a78bfa",
+                lime: "#77ff66",
+                pink: "#ff3bd4",
+              },
+            },
+            boxShadow: {
+              glow: "0 0 0 1px rgba(33, 246, 255, 0.22), 0 0 28px rgba(33, 246, 255, 0.12)",
+              glow2: "0 0 0 1px rgba(255, 59, 212, 0.22), 0 0 30px rgba(255, 59, 212, 0.10)",
+            },
+            keyframes: {
+              grain: {
+                "0%, 100%": { transform: "translate(0, 0)" },
+                "10%": { transform: "translate(-2%, -3%)" },
+                "20%": { transform: "translate(-4%, 2%)" },
+                "30%": { transform: "translate(3%, -2%)" },
+                "40%": { transform: "translate(-1%, 4%)" },
+                "50%": { transform: "translate(-3%, 1%)" },
+                "60%": { transform: "translate(4%, 0)" },
+                "70%": { transform: "translate(0, 3%)" },
+                "80%": { transform: "translate(-4%, 0)" },
+                "90%": { transform: "translate(2%, -3%)" },
+              },
+              flicker: {
+                "0%, 100%": { opacity: "0.85" },
+                "40%": { opacity: "0.6" },
+                "60%": { opacity: "0.92" },
+              },
+            },
+            animation: {
+              grain: "grain 8s steps(10) infinite",
+              flicker: "flicker 3.2s ease-in-out infinite",
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="bg-ink-950 text-white font-display antialiased selection:bg-neon-cyan/20 selection:text-white">
+    <!-- Cinematic preloader (landscape sequence) -->
+    <div id="preloader" class="preloader" aria-label="Loading">
+      <div class="preloader-scene" aria-hidden="true">
+        <div class="pl-stars"></div>
+        <div class="pl-haze"></div>
+        <div class="pl-mountain pl-m1"></div>
+        <div class="pl-mountain pl-m2"></div>
+        <div class="pl-mountain pl-m3"></div>
+        <div class="pl-ground"></div>
+        <div class="pl-scan"></div>
+      </div>
+
+      <div class="preloader-ui">
+        <div class="preloader-ui-top">
+          <div class="preloader-mark overflow-hidden">
+            <img src="11.png" alt="Logo" class="h-full w-full object-cover" />
+          </div>
+          <div class="min-w-0">
+            <div class="preloader-title">Loading</div>
+            <div class="preloader-sub">Warming up • timeline • glow • motion</div>
+          </div>
+        </div>
+
+        <div class="mt-5 flex justify-center">
+          <div class="h-16 w-16 overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-glow">
+            <img src="11.png" alt="Logo" class="h-full w-full object-cover" />
+          </div>
+        </div>
+
+        <div class="preloader-bar" aria-hidden="true">
+          <div id="preloader-fill" class="preloader-fill"></div>
+        </div>
+
+        <div class="preloader-meta">
+          <span class="preloader-label">RENDER</span>
+          <span id="preloader-pct" class="preloader-pct">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ambient background -->
+    <div class="pointer-events-none fixed inset-0 -z-20">
+      <div class="absolute inset-0 bg-[radial-gradient(1200px_circle_at_10%_-10%,rgba(33,246,255,0.12),transparent_55%),radial-gradient(900px_circle_at_95%_10%,rgba(255,59,212,0.10),transparent_55%),radial-gradient(1000px_circle_at_50%_110%,rgba(167,139,250,0.10),transparent_55%)]"></div>
+      <div class="absolute inset-0 opacity-[0.10] mix-blend-overlay noise"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-black/70"></div>
+    </div>
+
+    <!-- Top nav -->
+    <header class="fixed top-0 left-0 right-0 z-50">
+      <div class="mx-auto max-w-7xl px-5">
+        <div
+          class="mt-4 flex items-center justify-between rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl px-4 py-3 shadow-[0_0_0_1px_rgba(255,255,255,0.04)]"
+        >
+        <a href="#top" class="group flex items-center gap-3">
+            <!-- المكان الجديد للصورة -->
+            <div class="h-9 w-9 overflow-hidden rounded-xl border border-white/10 bg-white/5 grid place-items-center shadow-glow">
+              <img src="11.png" alt="Adham Mohamed" class="h-full w-full object-cover">
+            </div>
+            
+            <div class="leading-tight">
+              <div class="text-sm font-semibold tracking-wide">Adham Mohamed</div>
+              <div class="text-[11px] text-white/60">Video Editor • Multimedia</div>
+            </div>
+          </a>
+          <nav class="hidden md:flex items-center gap-1 text-sm">
+            <a class="navlink" href="#timeline">Timeline</a>
+            <a class="navlink" href="#projects">Projects</a>
+            <a class="navlink" href="#skills">Skills</a>
+            <a class="navlink" href="#experience">Experience</a>
+            <a class="navlink" href="#contact">Contact</a>
+          </nav>
+          <div class="flex items-center gap-2">
+            <a
+              class="btn btn-primary"
+              href="https://behance.net/adhammahrous1"
+              target="_blank"
+              rel="noreferrer"
+            >
+              View Portfolio
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="top" class="pt-28">
+      <!-- HERO -->
+      <section class="mx-auto max-w-7xl px-5">
+        <div class="grid lg:grid-cols-12 gap-8 items-end">
+          <div class="lg:col-span-7">
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+              <span class="h-1.5 w-1.5 rounded-full bg-neon-cyan shadow-glow animate-flicker"></span>
+              Available for edits • reels • social content
+            </div>
+
+            <h1 class="mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight">
+              Cinematic cuts for
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-white to-neon-pink">short‑form impact</span>.
+            </h1>
+
+            <p class="mt-4 text-white/70 text-lg leading-relaxed max-w-2xl">
+              Multimedia &amp; video editing enthusiast with hands‑on experience in social media content creation, short‑form reels,
+              and team leadership. I build bold visuals with clean storytelling and fast delivery.
+            </p>
+
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a class="btn btn-primary" href="#projects">Explore work</a>
+              <a class="btn btn-ghost" href="#timeline">Watch the timeline</a>
+              <a class="btn btn-ghost" href="#contact">Let’s collaborate</a>
+            </div>
+
+            <div class="mt-8 grid sm:grid-cols-2 gap-3">
+              <div class="card card-soft px-4 py-3 sm:px-5 sm:py-4">
+                <div class="text-[11px] tracking-[0.18em] uppercase text-white/55">Location</div>
+                <div class="mt-1 text-[15px] leading-relaxed font-semibold text-white/90">Obour City, Egypt</div>
+              </div>
+              <div class="card card-soft px-4 py-3 sm:px-5 sm:py-4">
+                <div class="text-[11px] tracking-[0.18em] uppercase text-white/55">Languages</div>
+                <div class="mt-1 text-[15px] leading-relaxed font-semibold text-white/90">Arabic (Native) • English (B1)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5">
+            <div class="card card-glass relative overflow-hidden p-5 sm:p-6">
+              <div class="absolute -top-24 -right-24 h-56 w-56 rounded-full bg-neon-cyan/15 blur-3xl"></div>
+              <div class="absolute -bottom-24 -left-24 h-56 w-56 rounded-full bg-neon-pink/10 blur-3xl"></div>
+
+              <div class="flex items-start justify-between gap-10 sm:gap-12">
+                <div>
+                  <div class="text-xs text-white/60">Contact</div>
+                  <dl class="mt-3 grid grid-cols-[84px_1fr] gap-x-5 gap-y-3 text-[13px] leading-relaxed">
+                    <dt class="text-white/60">Email</dt>
+                    <dd class="min-w-0 text-right">
+                      <a class="link break-words" href="mailto:adhammmahrous@gmail.com">adhammmahrous@gmail.com</a>
+                    </dd>
+
+                    <dt class="text-white/60">Mobile</dt>
+                    <dd class="min-w-0 text-right text-white/85">01007113793 / 01210502690</dd>
+
+                    <dt class="text-white/60">LinkedIn</dt>
+                    <dd class="min-w-0 text-right">
+                      <a
+                        class="link break-words"
+                        target="_blank"
+                        rel="noreferrer"
+                        href="https://www.linkedin.com/in/adhammahrous12?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                      >
+                        linkedin.com/in/adhammahrous12
+                      </a>
+                    </dd>
+
+                    <dt class="text-white/60">Behance</dt>
+                    <dd class="min-w-0 text-right">
+                      <a class="link break-words" target="_blank" rel="noreferrer" href="https://behance.net/adhammahrous1">
+                        behance.net/adhammahrous1
+                      </a>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="hidden sm:block">
+                    <div class="h-14 w-14 overflow-hidden rounded-2xl border border-white/10 bg-white/5 grid place-items-center shadow-glow2">
+                    <img src="11.png" alt="Profile" class="h-full w-full object-cover">
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-3 gap-2">
+                <div class="pill">Reels</div>
+                <div class="pill">Social edits</div>
+                <div class="pill">Team lead</div>
+                <div class="pill">Premiere Pro</div>
+                <div class="pill">After Effects</div>
+                <div class="pill">Photoshop</div>
+              </div>
+
+              <div class="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+                <div class="text-xs text-white/60">Scroll for the story</div>
+                <div class="flex items-center gap-2 text-xs text-white/70">
+                  <span class="h-1 w-12 rounded-full bg-white/10 overflow-hidden">
+                    <span id="scroll-meter" class="block h-full w-0 bg-gradient-to-r from-neon-cyan to-neon-pink"></span>
+                  </span>
+                  <span class="font-mono">00:00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIDEO TIMELINE (scrolling experience) -->
+      <section id="timeline" class="mt-16 sm:mt-20">
+        <div class="mx-auto max-w-7xl px-5">
+          <div class="flex items-end justify-between gap-6">
+            <div>
+              <div class="kicker">Video Timeline</div>
+              <h2 class="section-title">A scroll‑driven edit of my journey.</h2>
+              <p class="section-subtitle max-w-2xl">
+                Each chapter locks into place as you scroll—like scrubbing a timeline in an editing suite.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-8 grid lg:grid-cols-12 gap-6 items-start">
+            <div class="lg:col-span-5">
+              <div class="card card-glass sticky top-28 p-5 sm:p-6">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="text-xs text-white/60">Now playing</div>
+                    <div id="timeline-title" class="mt-1 text-lg font-semibold">Head of Multimedia — Alpha‑ASU</div>
+                    <div id="timeline-date" class="mt-1 text-sm text-white/60">Oct 2025 — Present</div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div class="h-2 w-2 rounded-full bg-neon-lime"></div>
+                    <div class="text-xs font-mono text-white/70">LIVE</div>
+                  </div>
+                </div>
+
+                <div class="mt-5">
+                  <div class="text-xs text-white/60">Focus</div>
+                  <div id="timeline-tags" class="mt-2 flex flex-wrap gap-2">
+                    <span class="tag">Leadership</span>
+                    <span class="tag">Short-form reels</span>
+                    <span class="tag">Publishing</span>
+                  </div>
+                </div>
+
+                <div class="mt-5">
+                  <div class="text-xs text-white/60">Highlights</div>
+                  <ul id="timeline-points" class="mt-3 space-y-3 text-[15px] leading-relaxed text-white/75 list-disc pl-5">
+                    <li>Co-led the multimedia team, overseeing design/video/content production.</li>
+                    <li>Produced and edited short-form video reels for social platforms.</li>
+                    <li>Planned and facilitated educational sessions: Photography Basics &amp; Graphic Design Fundamentals.</li>
+                  </ul>
+                </div>
+
+                <div class="mt-6 border-t border-white/10 pt-4 flex items-center justify-between">
+                  <div class="text-xs text-white/60">Timeline scrub</div>
+                  <div class="text-xs font-mono text-white/70"><span id="timeline-index">01</span>/<span>04</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:col-span-7">
+              <div class="grid gap-6">
+                <div class="card card-glass p-5 sm:p-6 w-full">
+                  <div class="flex items-center justify-between text-xs text-white/60">
+                    <div>Now playing</div>
+                    <div class="flex items-center gap-2">
+                      <span class="h-2 w-2 rounded-full bg-neon-lime"></span>
+                      <span class="font-semibold uppercase tracking-[0.24em] text-white">Live</span>
+                    </div>
+                  </div>
+                  <div class="mt-2 text-lg font-semibold">ALRayah</div>
+                  <div class="text-sm text-white/60">May 2026 — Present</div>
+                  <p class="mt-3 text-sm text-white/70 leading-relaxed">
+                    "Cinematic precision for short-form content. Where clean editing meets high-energy visuals."
+                  </p>
+                </div>
+
+                <div id="timeline-track" class="space-y-4">
+                  <article class="timeline-item card card-soft p-5 sm:p-6" data-title="Head of Multimedia — Alpha‑ASU" data-date="Oct 2025 — Present" data-tags="Leadership|Short-form reels|Publishing">
+                    <div class="flex items-start justify-between gap-4">
+                      <div>
+                        <div class="text-xs text-white/60">Chapter 00</div>
+                        <div class="mt-1 text-lg font-semibold">Video Editor</div>
+                        <div class="text-sm text-white/60">ALRayah</div>
+                      </div>
+                      <div class="timeline-badge">2026</div>
+                    </div>
+                    <ul class="mt-4 space-y-3 text-[15px] leading-relaxed text-white/75 list-disc pl-5">
+                      <li>"Transforming raw footage into high-impact visual stories. Fast-paced, bold, and crafted for the modern feed."</li>
+                      <li>"Blending cinematic aesthetics with seamless storytelling. I create visuals that don't just move—they leave a lasting impression."</li>
+                      <li>"Cinematic precision for short-form content. Where clean editing meets high-energy visuals."</li>
+                    </ul>
+                  </article>
+
+                  <article class="timeline-item card card-soft p-5 sm:p-6" data-title="Head of Multimedia — Alpha‑ASU" data-date="Oct 2025 — Present" data-tags="Leadership|Short-form reels|Publishing">
+                    <div class="flex items-start justify-between gap-4">
+                      <div>
+                        <div class="text-xs text-white/60">Chapter 01</div>
+                        <div class="mt-1 text-lg font-semibold">Head of Multimedia</div>
+                        <div class="text-sm text-white/60">Alpha‑ASU</div>
+                      </div>
+                      <div class="timeline-badge">2025+</div>
+                    </div>
+                    <ul class="mt-4 space-y-3 text-[15px] leading-relaxed text-white/75 list-disc pl-5">
+                      <li>Co-led the team alongside two heads; guided task delegation and feedback.</li>
+                      <li>Created/published social media designs and edited reels.</li>
+                      <li>Ran 2 sessions: Photography Basics + Graphic Design Fundamentals.</li>
+                    </ul>
+                  </article>
+
+                  <article class="timeline-item card card-soft p-5 sm:p-6" data-title="Video Editor — Lubtrac" data-date="Feb 2025 — Nov 2025" data-tags="Editing|Social media|Turnaround">
+                    <div class="flex items-start justify-between gap-4">
+                      <div>
+                        <div class="text-xs text-white/60">Chapter 02</div>
+                        <div class="mt-1 text-lg font-semibold">Video Editor</div>
+                        <div class="text-sm text-white/60">Lubtrac</div>
+                      </div>
+                      <div class="timeline-badge">2025</div>
+                    </div>
+                    <ul class="mt-4 space-y-3 text-[15px] leading-relaxed text-white/75 list-disc pl-5">
+                      <li>Edited videos for social media pages.</li>
+                    </ul>
+                  </article>
+
+                  <article class="timeline-item card card-soft p-5 sm:p-6" data-title="Marketing Participant — Alpha‑ASU" data-date="Mar 2025 — Aug 2025" data-tags="Branding|Presentations|Teamwork">
+                    <div class="flex items-start justify-between gap-4">
+                      <div>
+                        <div class="text-xs text-white/60">Chapter 03</div>
+                        <div class="mt-1 text-lg font-semibold">Marketing Participant</div>
+                        <div class="text-sm text-white/60">Alpha‑ASU</div>
+                      </div>
+                      <div class="timeline-badge">2025</div>
+                    </div>
+                    <ul class="mt-4 space-y-3 text-[15px] leading-relaxed text-white/75 list-disc pl-5">
+                      <li>Designed visual content for the Instashop brand during a marketing conference.</li>
+                      <li>Won with the team; recognized as “Hard Worker” and awarded “Best Presenter”.</li>
+                      <li>Built awareness of branding, visual identity, email marketing, and ROI mindset.</li>
+                    </ul>
+                  </article>
+
+                  <article class="timeline-item card card-soft p-5 sm:p-6" data-title="Multimedia Member — Alpha‑ASU" data-date="Nov 2024 — Aug 2025" data-tags="Premiere|Design|Growth">
+                    <div class="flex items-start justify-between gap-4">
+                      <div>
+                        <div class="text-xs text-white/60">Chapter 04</div>
+                        <div class="mt-1 text-lg font-semibold">Multimedia Member</div>
+                        <div class="text-sm text-white/60">Alpha‑ASU</div>
+                      </div>
+                      <div class="timeline-badge">2024</div>
+                    </div>
+                    <ul class="mt-4 space-y-3 text-[15px] leading-relaxed text-white/75 list-disc pl-5">
+                      <li>Learned Adobe Premiere, Photoshop, Lightroom, Illustrator.</li>
+                      <li>Awarded Peak Performance; acknowledged as Hard Worker &amp; Hidden Soldier.</li>
+                      <li>Led teams winning Best Designs Award; contributed to Best Idea Award.</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects" class="mt-16 sm:mt-20">
+        <div class="mx-auto max-w-7xl px-5">
+          <div class="kicker">Selected Work</div>
+          <h2 class="section-title">Project cards that expand on hover.</h2>
+          <p class="section-subtitle max-w-2xl">
+            Designed like “shots” on a slate—hover to expand details, then click out to continue scrolling.
+          </p>
+
+          <div class="mt-8 grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+            <article class="project-card card card-glass" data-accent="cyan">
+              <div class="project-thumb bg-gradient-to-br from-neon-cyan/30 via-white/5 to-transparent">
+                <img
+                  src="./Logo%20(4).png"
+                  alt="Alpha-ASU Logo"
+                  class="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-screen saturate-125"
+                  loading="lazy"
+                />
+                <div class="project-thumb-overlay"></div>
+                <div class="project-thumb-meta">
+                  <div class="text-xs text-white/70 font-mono tracking-[0.25em]">REELS</div>
+                  <div class="mt-1 text-lg font-semibold">Short‑Form Reel Edits</div>
+                  <div class="text-sm text-white/60">Alpha‑ASU</div>
+                </div>
+              </div>
+              <div class="project-body">
+                <div class="flex flex-wrap gap-2">
+                  <span class="tag">Pacing</span><span class="tag">Story beats</span><span class="tag">Social-ready</span>
+                </div>
+                <p class="mt-3 text-sm text-white/70 leading-relaxed">
+                  Fast, clean edits optimized for retention—cuts synced to audio, strong hooks, and consistent brand motion.
+                </p>
+                <div class="mt-4 flex items-center justify-between">
+                  <span class="text-xs text-white/60">Deliverable</span>
+                  <span class="text-xs font-mono text-white/80">9:16 • 1080×1920</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="project-card card card-glass" data-accent="pink">
+              <div class="project-thumb bg-gradient-to-br from-neon-pink/25 via-white/5 to-transparent">
+                <div class="project-thumb-overlay"></div>
+                <div class="project-thumb-meta">
+                  <div class="text-xs text-white/70 font-mono tracking-[0.25em]">EDITING</div>
+                  <div class="mt-1 text-lg font-semibold">Social Media Videos</div>
+                  <div class="text-sm text-white/60">Lubtrac</div>
+                </div>
+              </div>
+              <div class="project-body">
+                <div class="flex flex-wrap gap-2">
+                  <span class="tag">Cutdowns</span><span class="tag">Brand</span><span class="tag">Turnaround</span>
+                </div>
+                <p class="mt-3 text-sm text-white/70 leading-relaxed">
+                  Platform-first edits for social pages—tight structure, clean typography, and polished pacing for everyday posting.
+                </p>
+                <div class="mt-4 flex items-center justify-between">
+                  <span class="text-xs text-white/60">Output</span>
+                  <span class="text-xs font-mono text-white/80">MP4 • H.264</span>
+                </div>
+              </div>
+            </article>
+
+          </div>
+
+          <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+            <div class="text-sm text-white/60">
+              Want to see more? My full work lives on Behance.
+            </div>
+            <a class="btn btn-ghost" href="https://behance.net/adhammahrous1" target="_blank" rel="noreferrer">
+              Open Behance portfolio
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS (render-style) -->
+      <section id="skills" class="mt-16 sm:mt-20">
+        <div class="mx-auto max-w-7xl px-5">
+          <div class="kicker">Render‑Style Skills</div>
+          <h2 class="section-title">Built like a render queue.</h2>
+          <p class="section-subtitle max-w-2xl">
+            Technical tools + soft skills, visualized as “jobs” progressing through a pipeline.
+          </p>
+
+          <div class="mt-8 grid lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-7">
+              <div class="card card-glass overflow-hidden">
+                <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
+                  <div class="text-sm font-semibold">Render Queue</div>
+                  <div class="text-xs font-mono text-white/60">Queue • Priority • Status</div>
+                </div>
+
+                <div class="divide-y divide-white/10">
+                  <div class="render-row" data-pct="92" data-color="cyan">
+                    <div class="render-title">Adobe Premiere Pro</div>
+                    <div class="render-meta">Priority: High</div>
+                    <div class="render-bar"><div class="render-fill"></div></div>
+                    <div class="render-pct font-mono">92%</div>
+                  </div>
+                  <div class="render-row" data-pct="78" data-color="violet">
+                    <div class="render-title">Adobe After Effects</div>
+                    <div class="render-meta">Priority: High</div>
+                    <div class="render-bar"><div class="render-fill"></div></div>
+                    <div class="render-pct font-mono">78%</div>
+                  </div>
+                  <div class="render-row" data-pct="70" data-color="pink">
+                    <div class="render-title">Adobe Photoshop</div>
+                    <div class="render-meta">Priority: Medium</div>
+                    <div class="render-bar"><div class="render-fill"></div></div>
+                    <div class="render-pct font-mono">68%</div>
+                  </div>
+                  <div class="render-row" data-pct="70" data-color="lime">
+                    <div class="render-title">Adobe Illustrator</div>
+                    <div class="render-meta">Priority: Medium</div>
+                    <div class="render-bar"><div class="render-fill"></div></div>
+                    <div class="render-pct font-mono">67%</div>
+                  </div>
+                  <div class="render-row" data-pct="60" data-color="cyan">
+                    <div class="render-title">Microsoft Office</div>
+                    <div class="render-meta">Priority: Low</div>
+                    <div class="render-bar"><div class="render-fill"></div></div>
+                    <div class="render-pct font-mono">54%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:col-span-5">
+              <div class="card card-soft p-5 sm:p-6">
+                <div class="text-sm font-semibold">Soft Skills</div>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span class="chip">Leadership</span>
+                  <span class="chip">Communication</span>
+                  <span class="chip">Teamwork</span>
+                  <span class="chip">Presentation</span>
+                  <span class="chip">Problem solving</span>
+                  <span class="chip">Time management</span>
+                  <span class="chip">Critical thinking</span>
+                  <span class="chip">Persuasion &amp; negotiation</span>
+                </div>
+                <div class="mt-6 border-t border-white/10 pt-4">
+                  <div class="text-xs text-white/60">Note</div>
+                  <p class="mt-2 text-[15px] text-white/75 leading-relaxed">
+                    I’m strongest where storytelling meets structure: clear hooks, clean pacing, and teamwork that ships consistently.
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-5 card card-glass p-5 sm:p-6">
+                <div class="text-xs text-white/60">Education</div>
+                <div class="mt-2 text-base font-semibold">Higher Institute for Qualitative Studies</div>
+                <div class="text-sm text-white/60">2024 — 2028 • GPA: Good</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section id="experience" class="mt-16 sm:mt-20">
+        <div class="mx-auto max-w-7xl px-5">
+          <div class="kicker">Experience</div>
+          <h2 class="section-title">Leadership + production.</h2>
+          <p class="section-subtitle max-w-2xl">
+            From editing social videos to co-leading a multimedia team—focused on impact and consistency.
+          </p>
+
+          <div class="mt-8 grid lg:grid-cols-2 gap-5">
+            <div class="card card-soft p-5 sm:p-6">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <div class="text-xs text-white/60">Alpha‑ASU</div>
+                  <div class="mt-1 text-lg font-semibold">Head of Multimedia</div>
+                  <div class="text-sm text-white/60">Oct 2025 — Present</div>
+                </div>
+                <div class="pill">Team Lead</div>
+              </div>
+              <ul class="mt-4 space-y-3 text-[15px] leading-relaxed text-white/75 list-disc pl-5">
+                <li>Oversaw design/video/content production with other heads.</li>
+                <li>Produced short-form reels and supported publishing workflows.</li>
+                <li>Facilitated sessions on Photography Basics &amp; Graphic Design Fundamentals.</li>
+              </ul>
+            </div>
+
+            <div class="card card-soft p-5 sm:p-6">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <div class="text-xs text-white/60">ALRayah</div>
+                  <div class="mt-1 text-lg font-semibold">Video Editor</div>
+                  <div class="text-sm text-white/60">May-2026 -Present</div>
+                </div>
+                <div class="pill">Video Editor</div>
+              </div>
+              <ul class="mt-4 space-y-3 text-[15px] leading-relaxed text-white/75 list-disc pl-5">
+                <li>"Cinematic precision for short-form content. Where clean editing meets high-energy visuals."</li>
+              </ul>
+            </div>
+            
+            <div class="card card-soft p-5 sm:p-6">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <div class="text-xs text-white/60">Alpha‑ASU</div>
+                  <div class="mt-1 text-lg font-semibold">Marketing Participant</div>
+                  <div class="text-sm text-white/60">Mar 2025 — Aug 2025</div>
+                </div>
+                <div class="pill">Marketing</div>
+              </div>
+              <ul class="mt-4 space-y-3 text-[15px] leading-relaxed text-white/75 list-disc pl-5">
+                <li>Designed Instashop visuals during a marketing conference.</li>
+                <li>Winning team member; “Hard Worker” and “Best Presenter” awards.</li>
+              </ul>
+            </div>
+
+            <div class="card card-soft p-5 sm:p-6">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <div class="text-xs text-white/60">Alpha‑ASU</div>
+                  <div class="mt-1 text-lg font-semibold">Multimedia Member</div>
+                  <div class="text-sm text-white/60">Nov 2024 — Aug 2025</div>
+                </div>
+                <div class="pill">Growth</div>
+              </div>
+              <ul class="mt-4 space-y-3 text-[15px] leading-relaxed text-white/75 list-disc pl-5">
+                <li>Trained in design fundamentals and video editing basics.</li>
+                <li>Peak Performance recognition; Hard Worker &amp; Hidden Soldier acknowledgements.</li>
+                <li>Contributed to Best Designs and Best Idea awards.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-6 card card-glass p-5 sm:p-6">
+            <div class="flex items-start justify-between gap-6 flex-wrap">
+              <div>
+                <div class="text-sm font-semibold">Workshops • Terre des hommes (TDH)</div>
+                <div class="text-sm text-white/60">Sep 2025 — Oct 2025</div>
+                <p class="mt-3 text-[15px] text-white/75 leading-relaxed max-w-3xl">
+                  Six-day soft skills workshop: initiative planning (project management + strategy) and presentation skills for engaging communication.
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="chip">Project planning</span>
+                <span class="chip">Strategic thinking</span>
+                <span class="chip">Presenting</span>
+                <span class="chip">Implementation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VOLUNTEERING -->
+      <section class="mt-16 sm:mt-20">
+        <div class="mx-auto max-w-7xl px-5">
+          <div class="kicker">Volunteering</div>
+          <h2 class="section-title">On‑ground production energy.</h2>
+          <div class="mt-8 grid md:grid-cols-3 gap-4">
+            <div class="card card-soft px-4 py-3 sm:px-5 sm:py-4">
+              <div class="text-xs text-white/60">2025</div>
+              <div class="mt-1 font-semibold">Digitopia</div>
+              <div class="mt-2 text-sm text-white/70">Registration Team</div>
+            </div>
+            <div class="card card-soft px-4 py-3 sm:px-5 sm:py-4">
+              <div class="text-xs text-white/60">2025</div>
+              <div class="mt-1 font-semibold">Social Education Summit</div>
+              <div class="mt-2 text-sm text-white/70">Video Editing Team</div>
+            </div>
+            <div class="card card-soft px-4 py-3 sm:px-5 sm:py-4">
+              <div class="text-xs text-white/60">2025</div>
+              <div class="mt-1 font-semibold">ESC</div>
+              <div class="mt-2 text-sm text-white/70">Organizer</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" class="mt-16 sm:mt-24 pb-16">
+        <div class="mx-auto max-w-7xl px-5">
+          <div class="card card-glass overflow-hidden">
+            <div class="grid lg:grid-cols-12 gap-6">
+              <div class="lg:col-span-7 p-6">
+                <div class="kicker">Contact</div>
+                <h2 class="section-title mt-2">Let’s cut something unforgettable.</h2>
+                <p class="section-subtitle max-w-xl">
+                  If you want fast, clean, cinematic social edits—send the brief and the deadline. I’ll handle the timeline.
+                </p>
+
+                <div class="mt-6 flex flex-wrap gap-3">
+                  <a class="btn btn-primary" href="mailto:adhammmahrous@gmail.com">Email me</a>
+                  <a class="btn btn-ghost" href="https://behance.net/adhammahrous1" target="_blank" rel="noreferrer">Behance</a>
+                  <a class="btn btn-ghost" href="tel:+201007113793">Call</a>
+                </div>
+
+                <div class="mt-7 grid sm:grid-cols-2 gap-3">
+                  <div class="card card-soft px-4 py-3 sm:px-5 sm:py-4">
+                    <div class="text-[11px] tracking-[0.18em] uppercase text-white/55">Email</div>
+                    <div class="mt-1 text-[15px] leading-relaxed font-semibold text-white/90">adhammmahrous@gmail.com</div>
+                  </div>
+                  <div class="card card-soft px-4 py-3 sm:px-5 sm:py-4">
+                    <div class="text-[11px] tracking-[0.18em] uppercase text-white/55">Mobile</div>
+                    <div class="mt-1 text-[15px] leading-relaxed font-semibold text-white/90">01007113793 / 01210502690</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="lg:col-span-5 p-6 border-t lg:border-t-0 lg:border-l border-white/10">
+                <div class="text-sm font-semibold">Quick Stats</div>
+                <div class="mt-4 space-y-3">
+                  <div class="stat">
+                    <div class="stat-label">Primary focus</div>
+                    <div class="stat-value">Short‑form reels &amp; social edits</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-label">Tools</div>
+                    <div class="stat-value">Premiere • After Effects • Photoshop • Illustrator</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-label">Leadership</div>
+                    <div class="stat-value">Head of Multimedia (Alpha‑ASU)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-label">Education</div>
+                    <div class="stat-value">Higher Institute for Qualitative Studies (2024–2028)</div>
+                  </div>
+                </div>
+
+          <footer class="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-white/55">
+            <div>© <span id="year"></span> Adham Mohamed Mahrous • Video Editor</div>
+            <div class="font-mono tracking-[0.25em]">Khaled Shireef • +201023680442</div>
+          </footer>
+        </div>
+      </section>
+    </main>
+
+    <script src="./main.js"></script>
+  </body>
+</html>

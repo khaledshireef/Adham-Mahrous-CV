@@ -236,67 +236,20 @@ function initTimelineScrub() {
   const items = $all(".timeline-item");
   if (!items.length) return;
 
-  const title = $("#timeline-title");
-  const date = $("#timeline-date");
-  const tagsWrap = $("#timeline-tags");
-  const points = $("#timeline-points");
-  const idx = $("#timeline-index");
+  items.forEach((item) => {
+    if (!motionEnabled) return;
 
-  function setPanelFromItem(item, i) {
-    if (!item) return;
-    if (title) title.textContent = item.dataset.title || item.querySelector(".text-lg")?.textContent || "Timeline";
-    if (date) date.textContent = item.dataset.date || "";
-    if (idx) idx.textContent = String(i + 1).padStart(2, "0");
-
-    if (tagsWrap) {
-      tagsWrap.innerHTML = "";
-      const tags = (item.dataset.tags || "")
-        .split("|")
-        .map((t) => t.trim())
-        .filter(Boolean);
-      tags.forEach((t) => {
-        const span = document.createElement("span");
-        span.className = "tag";
-        span.textContent = t;
-        tagsWrap.appendChild(span);
-      });
-    }
-
-    if (points) {
-      const bullets = $all("li", item).slice(0, 4).map((li) => li.textContent.trim()).filter(Boolean);
-      points.innerHTML = "";
-      bullets.forEach((b) => {
-        const li = document.createElement("li");
-        li.textContent = b;
-        points.appendChild(li);
-      });
-    }
-  }
-
-  setPanelFromItem(items[0], 0);
-
-  items.forEach((item, i) => {
-    ScrollTrigger.create({
-      trigger: item,
-      start: "top 55%",
-      end: "bottom 55%",
-      onEnter: () => setPanelFromItem(item, i),
-      onEnterBack: () => setPanelFromItem(item, i),
-    });
-
-    if (motionEnabled) {
-      gsap.fromTo(
-        item,
-        { y: 16, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.65,
-          ease: "power2.out",
-          scrollTrigger: { trigger: item, start: "top 80%" },
-        },
-      );
-    }
+    gsap.fromTo(
+      item,
+      { y: 16, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.65,
+        ease: "power2.out",
+        scrollTrigger: { trigger: item, start: "top 80%" },
+      },
+    );
   });
 }
 
